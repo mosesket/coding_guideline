@@ -28,8 +28,8 @@ app/
 ├── Exceptions/          # Custom exception classes
 ├── Helpers/             # Utility functions and helper classes
 ├── Http/
-│   ├── Controllers/     # API/Web controllers (organized by feature/domain)
-│   │   └── Api/         # API controllers
+│   ├── Controllers/     # controllers (organized by feature/domain)
+│   │   └── folders/     # API controllers
 │   ├── Middleware/      # Custom middleware
 │   ├── Requests/        # Form validation classes
 │   └── Resources/       # API response transformers
