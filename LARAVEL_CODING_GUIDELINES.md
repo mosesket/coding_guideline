@@ -194,6 +194,10 @@ return response()->json([
 422  Unprocessable Entity Business rule failure / invalid state
 ```
 
+### Resource ID Keys
+- Do not expose generic `id` fields in JSON Resources.
+- Always return model IDs using a descriptive key like `apartment_id`, `booking_id`, `review_id`, `amenity_id`, or `image_id`.
+
 ---
 
 ## Controllers
