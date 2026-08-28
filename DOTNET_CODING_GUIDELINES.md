@@ -14,19 +14,19 @@ This document defines the coding standards and architecture conventions for all 
 4. [API Response Standards](#4-api-response-standards)
 5. [ResponseHelper](#5-responsehelper)
 6. [Controllers](#6-controllers)
-7. [Services & Interfaces](#7-services--interfaces)
-8. [Request DTOs & Validation](#8-request-dtos--validation)
+7. [Services &amp; Interfaces](#7-services--interfaces)
+8. [Request DTOs &amp; Validation](#8-request-dtos--validation)
 9. [Response DTOs](#9-response-dtos)
-10. [Database — EF Core & Migrations](#10-database--ef-core--migrations)
+10. [Database — EF Core &amp; Migrations](#10-database--ef-core--migrations)
 11. [Models](#11-models)
 12. [Enums](#12-enums)
 13. [Exceptions](#13-exceptions)
 14. [Middleware](#14-middleware)
 15. [Background Jobs (Hangfire)](#15-background-jobs-hangfire)
-16. [Authentication & Authorization](#16-authentication--authorization)
+16. [Authentication &amp; Authorization](#16-authentication--authorization)
 17. [Security](#17-security)
 18. [Logging](#18-logging)
-19. [Helpers & Extensions](#19-helpers--extensions)
+19. [Helpers &amp; Extensions](#19-helpers--extensions)
 20. [Swagger / API Documentation](#20-swagger--api-documentation)
 21. [Testing](#21-testing)
 22. [Performance](#22-performance)
@@ -69,6 +69,7 @@ src/
 ```
 
 **Rules:**
+
 - Only create folders when they are needed. No empty placeholder directories.
 - Keep the structure flat within each folder — avoid nesting more than two levels deep.
 - Domain subfolders (e.g. `Controllers/Admin/`) are used when a domain has three or more related files.
@@ -79,20 +80,20 @@ src/
 
 ### Classes
 
-| Type | Convention | Example |
-|---|---|---|
-| Controller | `{Domain}Controller` | `AuthController`, `OrderController` |
-| Service | `{Domain}Service` | `UserService`, `PaymentService` |
-| Service interface | `I{Domain}Service` | `IUserService`, `IPaymentService` |
-| Request DTO | `{Action}{Domain}Request` | `CreateUserRequest`, `UpdateOrderRequest` |
-| Response DTO | `{Domain}Response` | `UserResponse`, `OrderSummaryResponse` |
-| Validator | `{Request}Validator` | `CreateUserRequestValidator` |
-| Enum | Singular noun | `OrderStatus`, `PaymentMethod` |
-| Exception | `{Reason}Exception` | `NotFoundException`, `InsufficientFundsException` |
-| Job | `{Action}Job` | `SendEmailJob`, `ReconcilePaymentsJob` |
-| Middleware | `{Purpose}Middleware` | `BannedIpMiddleware`, `HmacWebhookMiddleware` |
-| Swagger example | `{Scenario}Example` | `UserCreatedExample`, `ErrorNotFoundExample` |
-| Extension class | `{Type}Extensions` | `StringExtensions`, `ClaimsPrincipalExtensions` |
+| Type              | Convention                  | Example                                               |
+| ----------------- | --------------------------- | ----------------------------------------------------- |
+| Controller        | `{Domain}Controller`      | `AuthController`, `OrderController`               |
+| Service           | `{Domain}Service`         | `UserService`, `PaymentService`                   |
+| Service interface | `I{Domain}Service`        | `IUserService`, `IPaymentService`                 |
+| Request DTO       | `{Action}{Domain}Request` | `CreateUserRequest`, `UpdateOrderRequest`         |
+| Response DTO      | `{Domain}Response`        | `UserResponse`, `OrderSummaryResponse`            |
+| Validator         | `{Request}Validator`      | `CreateUserRequestValidator`                        |
+| Enum              | Singular noun               | `OrderStatus`, `PaymentMethod`                    |
+| Exception         | `{Reason}Exception`       | `NotFoundException`, `InsufficientFundsException` |
+| Job               | `{Action}Job`             | `SendEmailJob`, `ReconcilePaymentsJob`            |
+| Middleware        | `{Purpose}Middleware`     | `BannedIpMiddleware`, `HmacWebhookMiddleware`     |
+| Swagger example   | `{Scenario}Example`       | `UserCreatedExample`, `ErrorNotFoundExample`      |
+| Extension class   | `{Type}Extensions`        | `StringExtensions`, `ClaimsPrincipalExtensions`   |
 
 ### Methods
 
@@ -186,21 +187,21 @@ public class ApiResponse : ApiResponse<object> { }
 
 ### Status code table
 
-| HTTP | JSON `Status` | When to use |
-|---|---|---|
-| 200 | 200 | Successful fetch, update, or action |
-| 201 | 201 | Resource successfully created |
-| 200 | 204 | List query succeeded but returned zero records (HTTP 200, body `Status: 204`) |
-| 400 | 400 | Invalid input, validation failure, generic fallback error |
-| 401 | 401 | Not authenticated |
-| 402 | 402 | Business-level insufficient balance / quota exhausted |
-| 403 | 403 | Authenticated but accessing a resource you do not own |
-| 404 | 404 | Resource not found |
-| 409 | 409 | Duplicate — resource already exists or action already performed |
-| 410 | 410 | Resource existed but has expired or been revoked |
-| 422 | 422 | Invalid state transition or business rule violation |
-| 429 | 429 | Rate limited (returned by ASP.NET rate limiter automatically) |
-| 500 | 500 | Unhandled exception — returned by `GlobalExceptionMiddleware` only |
+| HTTP | JSON`Status` | When to use                                                                    |
+| ---- | -------------- | ------------------------------------------------------------------------------ |
+| 200  | 200            | Successful fetch, update, or action                                            |
+| 201  | 201            | Resource successfully created                                                  |
+| 200  | 204            | List query succeeded but returned zero records (HTTP 200, body`Status: 204`) |
+| 400  | 400            | Invalid input, validation failure, generic fallback error                      |
+| 401  | 401            | Not authenticated                                                              |
+| 402  | 402            | Business-level insufficient balance / quota exhausted                          |
+| 403  | 403            | Authenticated but accessing a resource you do not own                          |
+| 404  | 404            | Resource not found                                                             |
+| 409  | 409            | Duplicate — resource already exists or action already performed               |
+| 410  | 410            | Resource existed but has expired or been revoked                               |
+| 422  | 422            | Invalid state transition or business rule violation                            |
+| 429  | 429            | Rate limited (returned by ASP.NET rate limiter automatically)                  |
+| 500  | 500            | Unhandled exception — returned by`GlobalExceptionMiddleware` only           |
 
 > **204 convention:** `NoContent` still uses HTTP 200 so the JSON body can be read by all clients. It signals "query ran, no records" — not a missing resource (that is 404).
 
@@ -490,6 +491,7 @@ public static class ServiceCollectionExtensions
 ```
 
 **Lifetime rules:**
+
 - `Singleton` — stateless and thread-safe (encryption, secrets, config readers)
 - `Scoped` — everything else; one instance per request
 - `Transient` — avoid unless there is a specific reason
@@ -658,15 +660,15 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
 
 ### Column naming conventions
 
-| Rule | Detail |
-|---|---|
-| Table names | `snake_case`, plural — `users`, `order_items` |
-| Column names | `snake_case` — always set via `.HasColumnName()` |
-| Primary key | `UUID()` default — `b.Property(x => x.Id).HasDefaultValueSql("UUID()")` |
-| Created timestamp | Every table has `created_at` with `.HasDefaultValueSql("UTC_TIMESTAMP()")` |
-| Money columns | Always `.HasPrecision(18, 2)` |
-| Enum columns | Always `.HasConversion<string>()` — readable in the DB without a lookup table |
-| JSON columns | `.HasColumnType("JSON")` for MySQL JSON type; `TEXT` for large encrypted blobs |
+| Rule              | Detail                                                                             |
+| ----------------- | ---------------------------------------------------------------------------------- |
+| Table names       | `snake_case`, plural — `users`, `order_items`                               |
+| Column names      | `snake_case` — always set via `.HasColumnName()`                              |
+| Primary key       | `UUID()` default — `b.Property(x => x.Id).HasDefaultValueSql("UUID()")`       |
+| Created timestamp | Every table has`created_at` with `.HasDefaultValueSql("UTC_TIMESTAMP()")`      |
+| Money columns     | Always`.HasPrecision(18, 2)`                                                     |
+| Enum columns      | Always`.HasConversion<string>()` — readable in the DB without a lookup table    |
+| JSON columns      | `.HasColumnType("JSON")` for MySQL JSON type; `TEXT` for large encrypted blobs |
 
 ### Seeding defaults
 
@@ -818,25 +820,25 @@ public abstract class AppException : Exception
 
 ### Catalogue of standard exceptions
 
-| Class | HTTP | When |
-|---|---|---|
-| `NotFoundException` | 404 | Entity not found by ID |
-| `ForbiddenException` | 403 | Caller is authenticated but does not own the resource |
-| `UnauthorizedException` | 401 | Missing or invalid authentication |
-| `ConflictException` | 409 | Duplicate resource or action already performed |
-| `InvalidStateTransitionException` | 422 | Business rule violated / invalid state change |
-| `InsufficientFundsException` | 402 | Not enough credits, balance, or quota |
-| `GoneException` | 410 | Resource existed but has expired |
+| Class                               | HTTP | When                                                  |
+| ----------------------------------- | ---- | ----------------------------------------------------- |
+| `NotFoundException`               | 404  | Entity not found by ID                                |
+| `ForbiddenException`              | 403  | Caller is authenticated but does not own the resource |
+| `UnauthorizedException`           | 401  | Missing or invalid authentication                     |
+| `ConflictException`               | 409  | Duplicate resource or action already performed        |
+| `InvalidStateTransitionException` | 422  | Business rule violated / invalid state change         |
+| `InsufficientFundsException`      | 402  | Not enough credits, balance, or quota                 |
+| `GoneException`                   | 410  | Resource existed but has expired                      |
 
 Add project-specific exceptions in the same `Exceptions/` folder, following the same pattern.
 
 ### Where exceptions are caught
 
-| Layer | Catches | Does |
-|---|---|---|
-| Controller | Individual `AppException` subclasses | Maps each to the correct `ResponseHelper` method |
-| Service | `Exception when (ex is not AppException)` | Rolls back the transaction, logs at `Error`, re-throws |
-| `GlobalExceptionMiddleware` | `AppException` and `Exception` | Final safety net — returns structured JSON for any uncaught exception |
+| Layer                         | Catches                                     | Does                                                                   |
+| ----------------------------- | ------------------------------------------- | ---------------------------------------------------------------------- |
+| Controller                    | Individual`AppException` subclasses       | Maps each to the correct`ResponseHelper` method                      |
+| Service                       | `Exception when (ex is not AppException)` | Rolls back the transaction, logs at`Error`, re-throws                |
+| `GlobalExceptionMiddleware` | `AppException` and `Exception`          | Final safety net — returns structured JSON for any uncaught exception |
 
 Never catch `AppException` in a service. Let it bubble up untouched to the controller.
 
@@ -1177,6 +1179,7 @@ public static class ClaimsPrincipalExtensions
 ```
 
 **Helpers vs Extensions:**
+
 - `Helpers/` — standalone static classes that don't extend an existing type
 - `Extensions/` — extension methods that attach to an existing type (`string`, `ClaimsPrincipal`, `IServiceCollection`)
 
@@ -1373,18 +1376,18 @@ var limit = await cache.GetOrCreateAsync("config:max_daily_orders", async entry 
 
 Follow [Microsoft C# Coding Conventions](https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/coding-style/coding-conventions) as the baseline. Project-specific additions:
 
-| Rule | Detail |
-|---|---|
-| C# 12 features | Use primary constructors, collection expressions `[]`, pattern matching, switch expressions everywhere |
-| `var` | Use when the type is obvious from the right-hand side; explicit type otherwise |
-| Expression bodies | Use for single-expression methods and properties |
-| Access modifiers | Always explicit — never rely on the C# default (`private`) |
-| Empty strings | `string.Empty` instead of `""` |
-| Magic values | No magic numbers or strings — use named constants or enum values |
-| Property names as strings | `nameof(MyProperty)` — never a string literal |
-| `null!` | For required navigation properties that EF Core guarantees to populate |
-| Collection initialisation | `= []` — C# 12 collection expression |
-| List spreading | `[.. someList]` — collection spread expression |
+| Rule                      | Detail                                                                                                  |
+| ------------------------- | ------------------------------------------------------------------------------------------------------- |
+| C# 12 features            | Use primary constructors, collection expressions`[]`, pattern matching, switch expressions everywhere |
+| `var`                   | Use when the type is obvious from the right-hand side; explicit type otherwise                          |
+| Expression bodies         | Use for single-expression methods and properties                                                        |
+| Access modifiers          | Always explicit — never rely on the C# default (`private`)                                           |
+| Empty strings             | `string.Empty` instead of `""`                                                                      |
+| Magic values              | No magic numbers or strings — use named constants or enum values                                       |
+| Property names as strings | `nameof(MyProperty)` — never a string literal                                                        |
+| `null!`                 | For required navigation properties that EF Core guarantees to populate                                  |
+| Collection initialisation | `= []` — C# 12 collection expression                                                                 |
+| List spreading            | `[.. someList]` — collection spread expression                                                       |
 
 ```csharp
 // Primary constructor
@@ -1466,23 +1469,23 @@ Follow this order every time a new feature or endpoint is added:
 
 ## 26. Folder Usage Summary
 
-| Folder | What goes here |
-|---|---|
-| `Controllers/` | HTTP routing, DTO acceptance, `ResponseHelper` calls — nothing else |
-| `Services/` | All business logic, `SaveChangesAsync`, transaction control, job enqueuing |
-| `Services/Interfaces/` | One interface per service — DI always binds to the interface |
-| `DTOs/Requests/` | One DTO class + one validator per endpoint, grouped by domain |
-| `DTOs/Responses/` | All response shapes; related small types may share a file |
-| `Models/` | EF Core entities + domain methods; no HTTP or service dependencies |
-| `Models/Audit/` | Audit DB entity classes (if a separate audit DB is used) |
-| `Data/` | `AppDbContext`, `AuditDbContext`, `Migrations/` |
-| `Enums/` | All fixed value sets; extension class in the same file |
-| `Exceptions/` | `AppException` subclasses only |
-| `Middleware/` | Request pipeline components |
-| `Jobs/` | Hangfire job wrappers |
-| `Configuration/SwaggerExamples/` | `IExamplesProvider` classes, grouped by domain |
-| `Extensions/` | Extension methods on existing types, one file per type |
-| `Helpers/` | Pure static utilities (`ResponseHelper`, `RandomHelper`) |
+| Folder                             | What goes here                                                              |
+| ---------------------------------- | --------------------------------------------------------------------------- |
+| `Controllers/`                   | HTTP routing, DTO acceptance,`ResponseHelper` calls — nothing else       |
+| `Services/`                      | All business logic,`SaveChangesAsync`, transaction control, job enqueuing |
+| `Services/Interfaces/`           | One interface per service — DI always binds to the interface               |
+| `DTOs/Requests/`                 | One DTO class + one validator per endpoint, grouped by domain               |
+| `DTOs/Responses/`                | All response shapes; related small types may share a file                   |
+| `Models/`                        | EF Core entities + domain methods; no HTTP or service dependencies          |
+| `Models/Audit/`                  | Audit DB entity classes (if a separate audit DB is used)                    |
+| `Data/`                          | `AppDbContext`, `AuditDbContext`, `Migrations/`                       |
+| `Enums/`                         | All fixed value sets; extension class in the same file                      |
+| `Exceptions/`                    | `AppException` subclasses only                                            |
+| `Middleware/`                    | Request pipeline components                                                 |
+| `Jobs/`                          | Hangfire job wrappers                                                       |
+| `Configuration/SwaggerExamples/` | `IExamplesProvider` classes, grouped by domain                            |
+| `Extensions/`                    | Extension methods on existing types, one file per type                      |
+| `Helpers/`                       | Pure static utilities (`ResponseHelper`, `RandomHelper`)                |
 
 ---
 
